@@ -1,8 +1,7 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import { MdDone, MdDelete } from 'react-icons/md';
-import { useTodoDispatch } from '../TodoContext';
-import axios from "axios";
+import React from "react";
+import styled, { css } from "styled-components";
+import { MdDone, MdDelete } from "react-icons/md";
+import { useTodoDispatch } from "../TodoContext";
 
 const Remove = styled.div`
   display: flex;
@@ -40,7 +39,7 @@ const CheckCircle = styled.div`
   justify-content: center;
   margin-right: 20px;
   cursor: pointer;
-  ${props =>
+  ${(props) =>
     props.done &&
     css`
       border: 1px solid #38d9a9;
@@ -52,42 +51,40 @@ const Text = styled.div`
   flex: 1;
   font-size: 21px;
   color: #495057;
-  ${props =>
+  ${(props) =>
     props.done &&
     css`
       color: #ced4da;
     `}
 `;
 
-function TodoItem({ id, done, text }) {
-    const dispatch = useTodoDispatch();
-    const onToggle = () => dispatch({ type: 'TOGGLE', id });
-    const onRemove = () => dispatch({ type: 'REMOVE', id });
+function TodoItem({ id, done, text, onClickDone, onClickDelete }) {
+  const dispatch = useTodoDispatch();
+  const onToggle = () => dispatch({ type: "TOGGLE", id });
+  const onRemove = () => dispatch({ type: "REMOVE", id });
 
-    const onClickDone = async () => {
-        const resp = await axios.put(`http://localhost:8060/todo/${id}`);
-    }
-
-    const onClickDelete = async () => {
-        const resp = await axios.delete(`http://localhost:8060/todo/${id}`);
-    }
-    return (
-        <TodoItemBlock>
-            <CheckCircle done={done} onClick={() => {
-                onToggle();
-                onClickDone().then();
-            }}>
-                {done && <MdDone />}
-            </CheckCircle>
-            <Text done={done}>{text}</Text>
-            <Remove onClick={() => {
-                onRemove();
-                onClickDelete().then();
-            }}>
-                <MdDelete />
-            </Remove>
-        </TodoItemBlock>
-    );
+  return (
+    <TodoItemBlock>
+      <CheckCircle
+        done={done}
+        onClick={() => {
+          onToggle();
+          onClickDone().then();
+        }}
+      >
+        {done && <MdDone />}
+      </CheckCircle>
+      <Text done={done}>{text}</Text>
+      <Remove
+        onClick={() => {
+          onRemove();
+          onClickDelete().then();
+        }}
+      >
+        <MdDelete />
+      </Remove>
+    </TodoItemBlock>
+  );
 }
 
 export default TodoItem;
